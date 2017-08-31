@@ -1,0 +1,8 @@
+{
+  "require": {
+    "firebase/php-jwt": "^4.0"
+  },
+  "require-dev": {
+    "phalcon/devtools": "^3.2"
+  }
+}

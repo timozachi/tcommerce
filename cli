@@ -1,0 +1,9 @@
+<?php
+
+use TCommerce\Core\CliApplication as Application;
+
+require_once __DIR__ . '/base.php';
+
+/** Handle the request */
+$application = new Application($di);
+$response = $application->handle($argv);
