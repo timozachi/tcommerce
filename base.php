@@ -2,6 +2,11 @@
 
 use Phalcon\Di\FactoryDefault;
 
+if(!extension_loaded('phalcon'))
+{
+	throw new \Exception('Phalcon extension not loaded');
+}
+
 error_reporting(E_ALL);
 set_time_limit(600);
 
