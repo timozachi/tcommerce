@@ -20,11 +20,16 @@ class Application extends PhalconApplication
 
 		$this->modules = $modules;
 		$this->registerModules($modules);
-
-		$this->_detectModule();
 	}
 
-	protected function _detectModule()
+	public function handle($uri = null)
+	{
+		$this->_detectModule($uri);
+
+		return parent::handle($uri);
+	}
+
+	protected function _detectModule($uri = null)
 	{
 		/** @var Router $module_router A router to detect the current module, and set it as default */
 		$module_router = new Router(false);
@@ -39,7 +44,7 @@ class Application extends PhalconApplication
 			}
 		}
 
-		$module_router->handle();
+		$module_router->handle($uri);
 		$this->module = $module_router->getModuleName();
 		$this->setDefaultModule($module_router->getModuleName());
 	}

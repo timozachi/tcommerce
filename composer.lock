@@ -224,16 +224,16 @@
         },
         {
             "name": "phalcon/devtools",
-            "version": "v3.2.3",
+            "version": "v3.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/phalcon-devtools.git",
-                "reference": "6775406cced4638f419122c63402d1c2b59b065c"
+                "reference": "3088ebf08367ec8082b5d0cef8d354d6c7696087"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/phalcon-devtools/zipball/6775406cced4638f419122c63402d1c2b59b065c",
-                "reference": "6775406cced4638f419122c63402d1c2b59b065c",
+                "url": "https://api.github.com/repos/phalcon/phalcon-devtools/zipball/3088ebf08367ec8082b5d0cef8d354d6c7696087",
+                "reference": "3088ebf08367ec8082b5d0cef8d354d6c7696087",
                 "shasum": ""
             },
             "require": {
@@ -282,7 +282,7 @@
                 "phar",
                 "webtools"
             ],
-            "time": "2017-08-24T21:46:17+00:00"
+            "time": "2017-09-11T12:32:13+00:00"
         },
         {
             "name": "psr/log",
