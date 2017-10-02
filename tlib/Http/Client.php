@@ -18,7 +18,7 @@ function default_user_agent()
 
 	if(!$default_agent)
 	{
-		$default_agent = 'TLib/Http/' . Client::VERSION;
+		$default_agent = 'TLib/Http/Client/' . Client::VERSION;
 		if(function_exists('curl_version'))
 		{
 			$version = \curl_version();

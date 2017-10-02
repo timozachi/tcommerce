@@ -77,9 +77,9 @@ class Files extends PhalconFiles
 	{
 		if(!$this->_smartStarted) {
 			return false;
-		} else if($this->_started) {
+		} elseif($this->_started) {
 			return true;
-		} else if($force || !empty($_COOKIE[$this->getName()])) {
+		} elseif($force || !empty($_COOKIE[$this->getName()])) {
 			parent::start();
 
 			return true;

@@ -75,6 +75,17 @@ $config = new Phalcon\Config([
 		'logLongCalls'     => true,
 		'longCallsTimeout' => 4,
 		'longCallsLogFile' => $logs_dir . 'apilongcalls.log'
+	],
+	'cache' => [
+		'adapter' => 'Memory',
+		'data' =>  null
+		/*
+		//Use this option for redis adapter
+		'data' => [
+			'host'       => '120.0.0.1',
+			'port'       => 6379
+		]
+		*/
 	]
 ]);
 if(is_readable($config_dir . 'config.env.php')) {

@@ -1,7 +1,5 @@
 <?php
 
-use TLib\Utils\Stringify;
-use Phalcon\Cache\Backend;
 use Phalcon\Cache\Frontend\Data as FrontendCache;
 use Phalcon\Cli\Dispatcher as CliDispatcher;
 use Phalcon\Config;
@@ -12,9 +10,11 @@ use Phalcon\Events\Event;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Logger\Adapter\File as Logger;
 use Phalcon\Mvc\Dispatcher;
+use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Url as UrlResolver;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
+use TLib\Utils\Stringify;
 
 /**
  * @var FactoryDefault $di
@@ -23,14 +23,13 @@ use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 /**
  * Shared configuration service
  */
-
 $di->setShared('config', function ()
 {
 	return include APP_PATH . '/config/config.php';
 });
 
 /**
- * Shared loader service
+ * Shared autoload service
  */
 $di->setShared('loader', function ()
 {
@@ -55,7 +54,13 @@ $di->setShared('router', function ()
 	if(php_sapi_name() === 'cli') {
 		$router = include APP_PATH . '/config/cli-routes.php';
 	} else {
-		$router = include APP_PATH . '/config/routes.php';
+		/**
+		 * @var Router
+		 * You can use either module-routes.php or routes.php, module-routes loads the
+		 * routes for the current module only, this means you cannot generate routes
+		 * for another module
+		 */
+		$router = include APP_PATH . '/config/module-routes.php';
 	}
 
 	return $router;
@@ -159,14 +164,13 @@ $di->setShared('db', function ()
  */
 $di->setShared('modelsMetadata', function ()
 {
-	if(false && extension_loaded('apcu')) {
-		/** @todo Criar classe TLib\Mvc\Model\Metadata\Apcu */
-		return new TLib\Mvc\Model\Metadata\Apcu();
-	} elseif(extension_loaded('apc')) {
-		return new Phalcon\Mvc\Model\Metadata\Apc();
-	}
+	$config = $this->getConfig();
 
-    return new Phalcon\Mvc\Model\Metadata\Memory();
+	$cache_config = $config->cache;
+	$class = 'Phalcon\Mvc\Model\Metadata\\' . $cache_config->adapter;
+	$cache = new $class($cache_config->data ? $cache_config->data->toArray() : null);
+
+    return $cache;
 });
 
 /*
@@ -174,21 +178,20 @@ $di->setShared('modelsMetadata', function ()
  */
 $di->set('modelsCache', function ()
 {
+	$config = $this->getConfig();
+
 	/*
 	 * Cache data for 30 minutes by default
 	 */
-	$frontCache = new FrontendCache(
+	$front_cache = new FrontendCache(
 		['lifetime' => 1800]
 	);
 
-	if(false && extension_loaded('apcu')) {
-		/** @todo Criar classe TLib\Cache\Backend\Apcu */
-		return new TLib\Cache\Backend\Apcu();
-	} elseif(extension_loaded('apc')) {
-		return new Backend\Apc($frontCache);
-	}
+	$cache_config = $config->cache;
+	$class = 'Phalcon\Cache\Backend\\' . $cache_config->adapter;
+	$cache = new $class($front_cache, $cache_config->data ? $cache_config->data->toArray() : null);
 
-	return new Backend\Memory($frontCache);
+	return new $cache;
 });
 
 $di->set('log', function ()
