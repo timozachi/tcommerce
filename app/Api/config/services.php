@@ -34,7 +34,7 @@ $em->attach('dispatch:beforeException', new ExceptionPlugin());
  */
 $em->attach('dispatch', new AuthPlugin());
 
-if($config->api->logRequests) {
+if ($config->api->logRequests) {
 	$em->attach('dispatch:afterDispatchLoop', new LogPlugin());
 }
 

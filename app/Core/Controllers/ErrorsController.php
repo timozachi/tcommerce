@@ -2,7 +2,7 @@
 
 namespace TCommerce\Core\Controllers;
 
-use TCommerce\Core\Http\Exceptions\HttpException;
+use TCommerce\Core\Exceptions\HttpException;
 use TLib\Http\Status;
 
 class ErrorsController extends Controller
@@ -11,7 +11,7 @@ class ErrorsController extends Controller
 	public function httpExceptionAction(HttpException $exception)
 	{
 		$this->view(
-			'errors/exception',
+			'errors/http-exception',
 			[
 				'code' => $exception->getStatusCode(),
 				'message' => Status::$texts[$exception->getStatusCode()]
@@ -24,7 +24,7 @@ class ErrorsController extends Controller
 	public function show404Action()
 	{
 		$this->view(
-			'errors/show404',
+			'errors/404',
 			[],
 			404
 		);
@@ -33,7 +33,7 @@ class ErrorsController extends Controller
 	public function show500Action()
 	{
 		$this->view(
-			'errors/show500',
+			'errors/500',
 			[],
 			500
 		);

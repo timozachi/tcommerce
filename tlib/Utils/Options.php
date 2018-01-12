@@ -3,6 +3,7 @@
 namespace TLib\Utils;
 
 use InvalidArgumentException;
+use Closure;
 
 /**
  * TLib\Utils\Options
@@ -50,8 +51,7 @@ class Options
 	 */
 	public function get($key = null)
 	{
-		if(!is_null($key) && !isset($this->_options[$key]))
-		{
+		if (! is_null($key) && ! isset($this->_options[$key])) {
 			throw new InvalidArgumentException('Invalid key: ' . $key);
 		}
 		
@@ -65,21 +65,20 @@ class Options
 	public function validate($key, $value)
 	{
 		$valid = true;
-		if(isset($this->_validation[$key]))
+		if (isset($this->_validation[$key]))
 		{
 			$validation = $this->_validation[$key];
-			if($validation instanceof \Closure) $valid = $validation($value);
+			if($validation instanceof Closure) $valid = $validation($value);
 			elseif(is_callable($validation)) $valid = call_user_func($validation, $value);
 		}
 
-		if(!$valid)
-		{
+		if (! $valid) {
 			throw new InvalidArgumentException('Invalid option value for key: ' . $key);
 		}
 	}
 	
 	/**
-	 * Get's current options optionally overriden by new options
+	 * Gets current options optionally overridden by new options
 	 *
 	 * @param array $options
 	 *

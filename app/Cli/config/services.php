@@ -15,5 +15,6 @@ $di->getShared('view')->disable();
  */
 $dispatcher = $di->getShared('dispatcher');
 $dispatcher->setDefaultNamespace('TCommerce\Cli\Tasks');
+$dispatcher->setNamespaceName('TCommerce\Cli\Tasks');
 
 $em = $dispatcher->getEventsManager();

@@ -1,9 +1,22 @@
+#!/usr/bin/env php
 <?php
 
 use TCommerce\Core\CliApplication as Application;
 
 require_once __DIR__ . '/base.php';
 
+$arguments = [];
+foreach ($argv as $k => $arg)
+{
+    if ($k === 1) {
+        $arguments['task'] = $arg;
+    } elseif ($k === 2) {
+        $arguments['action'] = $arg;
+    } elseif ($k >= 3) {
+        $arguments['params'][] = $arg;
+    }
+}
+
 /** Handle the request */
 $application = new Application($di);
-$response = $application->handle($argv);
+$application->handle($arguments);

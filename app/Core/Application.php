@@ -24,18 +24,20 @@ class Application extends PhalconApplication
 
 	public function handle($uri = null)
 	{
-		$this->_detectModule($uri);
+        $this->detectCurrentModule($uri);
 
 		return parent::handle($uri);
 	}
 
-	protected function _detectModule($uri = null)
+	protected function detectCurrentModule($uri = null)
 	{
-		/** @var Router $module_router A router to detect the current module, and set it as default */
+		/**
+         * @var Router $module_router A router to detect the current module, and set it as default
+         */
 		$module_router = new Router(false);
-		foreach($this->modules as $module=>$paths)
+		foreach ($this->modules as $module=>$paths)
 		{
-			if(isset($paths['prefix']))
+			if (isset($paths['prefix']))
 			{
 				$module_router->add(
 					"{$paths['prefix']}/(.*)",

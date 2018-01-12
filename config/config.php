@@ -26,7 +26,7 @@ $modules = [
 ];
 
 $folder = '/';
-if(!empty($_SERVER['DOCUMENT_ROOT']))
+if (! empty($_SERVER['DOCUMENT_ROOT']))
 {
 	$folder = str_replace(realpath($_SERVER['DOCUMENT_ROOT']), '', realpath('.'));
 	$folder = str_replace([DIRECTORY_SEPARATOR, '/public'], ['/', ''], $folder);
@@ -34,7 +34,7 @@ if(!empty($_SERVER['DOCUMENT_ROOT']))
 }
 
 $config = new Phalcon\Config([
-	//Values are prod, dev and debug
+	//Values are prod, dev
 	'env' => 'prod',
     'database' => [
         'adapter'     => 'Mysql',
@@ -42,8 +42,8 @@ $config = new Phalcon\Config([
         'username'    => 'root',
         'password'    => '',
         'dbname'      => 'tcommerce',
-        'charset'     => 'utf8',
-        'logQueries'  => true,
+        'charset'     => 'utf8mb4',
+        'logQueries'  => false,
         'logFile'     => 'queries.log',
         'logTrace'    => false
     ],
@@ -60,7 +60,7 @@ $config = new Phalcon\Config([
 		'forceSSL'    => false
     ],
 	'templating' => [
-		'compileAlways'    => true
+		'compileAlways'    => false
 	],
 	'api' => [
 		'baseUri'          => $base_uri . 'api/v1',
@@ -73,7 +73,7 @@ $config = new Phalcon\Config([
 		'logTrace'         => false,
 		'logFile'          => $logs_dir . 'apicalls.log',
 		'logLongCalls'     => true,
-		'longCallsTimeout' => 4,
+		'longCallsTimeout' => 2,
 		'longCallsLogFile' => $logs_dir . 'apilongcalls.log'
 	],
 	'cache' => [
@@ -88,7 +88,7 @@ $config = new Phalcon\Config([
 		*/
 	]
 ]);
-if(is_readable($config_dir . 'config.env.php')) {
+if (is_readable($config_dir . 'config.env.php')) {
 	$config->merge(include $config_dir . 'config.env.php');
 }
 

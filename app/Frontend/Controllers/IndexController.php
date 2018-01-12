@@ -2,6 +2,8 @@
 
 namespace TCommerce\Frontend\Controllers;
 
+use Exception;
+
 class IndexController extends Controller
 {
 
@@ -14,5 +16,12 @@ class IndexController extends Controller
 			[]
 		);
 	}
+
+	public function debuggerAction()
+    {
+        throw new Exception(
+            'Test exception so it displays debug information'
+        );
+    }
 
 }

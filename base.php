@@ -2,31 +2,44 @@
 
 use Phalcon\Di\FactoryDefault;
 
-if(!extension_loaded('phalcon'))
-{
-	throw new \Exception('Phalcon extension not loaded');
+define('TCOMMERCE_START', microtime(true));
+
+if (! extension_loaded('phalcon')) {
+	throw new Exception('Phalcon extension is not loaded, please install phalcon');
 }
 
-error_reporting(E_ALL);
 set_time_limit(600);
 
 define('APP_PATH', __DIR__);
 
-$init_time = microtime(true);
+if (is_readable(APP_PATH . '/vendor/autoload.php')) {
+	require_once APP_PATH . '/vendor/autoload.php';
+}
+
+/**
+ * Shared configuration service
+ */
+$config = include APP_PATH . '/config/config.php';
+
+// Debug component if environment is not production, errors that happen before this line of code
+// will not be displayed in debug form
+if ($config->env !== 'prod')
+{
+    $debug = new Phalcon\Debug();
+    $debug->listen();
+}
 
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack
  * @var FactoryDefault $di
  */
-if(php_sapi_name() === 'cli') {
-	$di = new FactoryDefault\Cli();
+if (php_sapi_name() === 'cli') {
+    $di = new FactoryDefault\Cli();
 } else {
-	$di = new FactoryDefault();
+    $di = new FactoryDefault();
 }
 
-if(is_readable(APP_PATH . '/vendor/autoload.php')) {
-	require_once APP_PATH . '/vendor/autoload.php';
-}
+$di->setShared('config', $config);
 
 /**
  * Read services

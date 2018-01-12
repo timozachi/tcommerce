@@ -8,7 +8,9 @@ use Phalcon\Session\Adapter\Files as PhalconFiles;
  * Class Files
  *
  * This class is a session files adapter for Phalcon, the main difference is that
- * it only starts when it's actually used
+ * it only starts when it's actually used. If there isn't a cookie with the session id,
+ * the session isn't started for read operations, since it would create an empty
+ * session anyways
  *
  * @package TLib\SmartSession\Adapter
  */
@@ -48,7 +50,7 @@ class Files extends PhalconFiles
 
 	public function has($index)
 	{
-		if(!static::_start(false)) {
+		if (! static::_start(false)) {
 			return false;
 		}
 
@@ -57,8 +59,8 @@ class Files extends PhalconFiles
 
 	public function remove($index)
 	{
-		if(!static::_start(false)) {
-			return false;
+		if (! static::_start(false)) {
+			return ;
 		}
 
 		parent::remove($index);
@@ -66,7 +68,7 @@ class Files extends PhalconFiles
 
 	public function destroy($removeData = false)
 	{
-		if(!static::_start(false)) {
+		if (! static::_start(false)) {
 			return false;
 		}
 
@@ -75,11 +77,11 @@ class Files extends PhalconFiles
 
 	protected function _start($force = false)
 	{
-		if(!$this->_smartStarted) {
+		if (! $this->_smartStarted) {
 			return false;
-		} elseif($this->_started) {
+		} elseif ($this->_started) {
 			return true;
-		} elseif($force || !empty($_COOKIE[$this->getName()])) {
+		} elseif ($force || ! empty($_COOKIE[$this->getName()])) {
 			parent::start();
 
 			return true;

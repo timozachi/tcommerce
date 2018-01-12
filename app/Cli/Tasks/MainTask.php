@@ -7,9 +7,9 @@ use Phalcon\Cli\Task;
 class MainTask extends Task
 {
 
-	public function mainAction()
+	public function indexAction()
 	{
-		echo "My banana is large\n";
+		echo "This is the main:index action\n";
 	}
 
 }

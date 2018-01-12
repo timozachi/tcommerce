@@ -82,27 +82,16 @@ class Controller extends CoreController
 
 	protected function _getMeta($type = null, $extraMeta = [])
 	{
-		global $init_time;
-
+	    $init_time = defined('TCOMMERCE_START') ? TCOMMERCE_START : $this->initTime;
 		$microtime = microtime(true);
 		$request = $this->request->getMethod() . ' ' . $this->request->getURI();
 
 		return array_merge([
-			'type' => $type,
+			'type'       => $type,
 			'total_time' => round(($microtime - $init_time) * 1000, 2),
-			'time' => round(($microtime - $this->initTime) * 1000, 2),
-			'request' => $request
+			'local_time' => round(($microtime - $this->initTime) * 1000, 2),
+			'request'    => $request
 		], $extraMeta);
 	}
-
-	protected function _requireLoggedInUser($detail = 'A logged in user is required to perform this action.')
-	{
-		if(!$this->auth->check()) {
-			throw new LoggedInUserRequiredException($detail);
-		}
-
-		return true;
-	}
-
 
 }

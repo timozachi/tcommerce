@@ -1,1 +1,0 @@
-<h3>(Frontend) Erro HTTP({{ code }}): {{ message }}</h3>

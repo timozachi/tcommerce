@@ -48,11 +48,15 @@ class Controller extends PhalconController
 	 */
 	public function view($template = null, $vars = [], $status = 200, $headers = [])
 	{
-		if(!empty($template)) $this->view->pick($template);
-		if(!empty($vars)) $this->view->setVars($vars);
+		if (! empty($template)) {
+		    $this->view->pick($template);
+        }
+		if (! empty($vars)) {
+		    $this->view->setVars($vars);
+        }
 
 		$this->response->setStatusCode($status);
-		foreach($headers as $header_key=>$header_val)
+		foreach ($headers as $header_key=>$header_val)
 		{
 			$this->response->setHeader($header_key, $header_val);
 		}

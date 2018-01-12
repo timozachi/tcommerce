@@ -2,6 +2,8 @@
 
 /**
  * This file only loads the current module's routes instead of all routes from all modules
+ *
+ * @var \Phalcon\Config $config
  */
 
 use Phalcon\Mvc\Router;
@@ -15,7 +17,9 @@ $router->notFound([
 ]);
 
 //Load module routes
-$module_routes = $config->application->appDir . ucfirst($application->module) . '/Config/routes.php';
-if(is_readable($module_routes)) require_once $module_routes;
+$module_routes = $config->application->appDir . ucfirst($application->module) . '/config/routes.php';
+if (is_readable($module_routes)) {
+    require_once $module_routes;
+}
 
 return $router;

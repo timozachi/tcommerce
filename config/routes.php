@@ -13,7 +13,7 @@ $router->removeExtraSlashes(true);
 foreach($modules as $module=>$paths)
 {
 	//Load module routes
-	$module_routes = $config->application->appDir . ucfirst($module) . '/Config/routes.php';
+	$module_routes = $config->application->appDir . ucfirst($module) . '/config/routes.php';
 	if(is_readable($module_routes)) require_once $module_routes;
 }
 

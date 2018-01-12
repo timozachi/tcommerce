@@ -3,7 +3,7 @@
 return new Phalcon\Config([
 	'application' => [
 		'logsDir'          => $logs_dir = $config->application->logsDir . 'admin/',
-		'viewsDir'         => $config->application->appDir . 'Admin/Views/'
+		'viewsDir'         => $config->application->appDir . 'Admin/views/'
 	],
 	'api' => [
 		'logFile'          => $logs_dir . 'apicalls.log',

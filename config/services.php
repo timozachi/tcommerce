@@ -21,14 +21,6 @@ use TLib\Utils\Stringify;
  */
 
 /**
- * Shared configuration service
- */
-$di->setShared('config', function ()
-{
-	return include APP_PATH . '/config/config.php';
-});
-
-/**
  * Shared autoload service
  */
 $di->setShared('loader', function ()
@@ -55,7 +47,7 @@ $di->setShared('router', function ()
 		$router = include APP_PATH . '/config/cli-routes.php';
 	} else {
 		/**
-		 * @var Router
+		 * @var Router $router
 		 * You can use either module-routes.php or routes.php, module-routes loads the
 		 * routes for the current module only, this means you cannot generate routes
 		 * for another module
@@ -101,6 +93,7 @@ $di->setShared('view', function ()
 			}
 		]
 	);
+	$view->setViewsDir($config->application->viewsDir);
 	$view->setRenderLevel(View::LEVEL_ACTION_VIEW);
 
 	return $view;
@@ -118,7 +111,7 @@ $di->setShared('db', function ()
 	/** @var Phalcon\Db\Adapter\Pdo $connection */
 	$connection = new $class($db_config->toArray());
 
-	if(!empty($db_config->logQueries))
+	if (! empty($db_config->logQueries))
 	{
 		$logger = new Logger(
 			$config->application->logsDir . $db_config->logFile,
@@ -128,10 +121,10 @@ $di->setShared('db', function ()
 
 		$em = new EventsManager();
 
-		$stringify = new Stringify(['max_array_elements' => 20]); $microtime = null;
+		$stringify = new Stringify(['max_array_elements' => 20]);
 		$em->attach('db', function (Event $event, DbAdapter $connection) use ($db_config, $logger, $stringify, $profiler)
 		{
-			if($event->getType() == 'beforeQuery')
+			if ($event->getType() == 'beforeQuery')
 			{
 				$profiler->startProfile(
 					$connection->getSQLStatement(),
@@ -139,7 +132,7 @@ $di->setShared('db', function ()
 					$connection->getSQLBindTypes()
 				);
 			}
-			elseif($event->getType() == 'afterQuery')
+			elseif ($event->getType() == 'afterQuery')
 			{
 				$profiler->stopProfile();
 				$profile = $profiler->getLastProfile();
@@ -197,7 +190,7 @@ $di->set('modelsCache', function ()
 $di->set('log', function ()
 {
 	$logger = new Logger(
-		$this->getConfig()->application->logsDir . 'default.log',
+		$this->getConfig()->application->logsDir . 'tcommerce.log',
 		['mode' => 'a']
 	);
 
@@ -209,7 +202,7 @@ $di->set('log', function ()
  */
 $di->setShared('dispatcher', function ()
 {
-	if(php_sapi_name() === 'cli') {
+	if (php_sapi_name() === 'cli') {
 		$dispatcher = new CliDispatcher();
 	} else {
 		$dispatcher = new Dispatcher();

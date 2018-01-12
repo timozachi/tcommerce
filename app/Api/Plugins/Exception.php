@@ -9,13 +9,9 @@ use Phalcon\Mvc\Dispatcher as MvcDispatcher;
 use Phalcon\Mvc\Dispatcher\Exception as DispatcherException;
 use Phalcon\Mvc\User\Plugin;
 use TCommerce\Api\Exceptions\APIException;
+use TCommerce\Core\Plugins\Exception as CoreExceptionPlugin;
 
-/**
- * NotFoundPlugin
- *
- * Handles not-found controller/actions
- */
-class Exception extends Plugin
+class Exception extends CoreExceptionPlugin
 {
 
 	/**
@@ -31,7 +27,7 @@ class Exception extends Plugin
 	{
 		error_log($exception->getMessage() . PHP_EOL . $exception->getTraceAsString());
 
-		if($exception instanceof APIException)
+		if ($exception instanceof APIException)
 		{
 			$obj = [
 				'controller' => 'errors',
@@ -39,9 +35,12 @@ class Exception extends Plugin
 				'params' => [$exception]
 			];
 		}
-		elseif(
+		elseif (
 			$exception instanceof DispatcherException &&
-			in_array($exception->getCode(), [Dispatcher::EXCEPTION_HANDLER_NOT_FOUND, Dispatcher::EXCEPTION_ACTION_NOT_FOUND], true)
+			in_array(
+			    $exception->getCode(),
+                [Dispatcher::EXCEPTION_HANDLER_NOT_FOUND, Dispatcher::EXCEPTION_ACTION_NOT_FOUND],
+                true)
 		) {
 			$obj = [
 				'controller' => 'errors',
@@ -56,20 +55,34 @@ class Exception extends Plugin
 			];
 		}
 
-		if($this->config->env == 'debug' && empty($obj['params']))
-		{
-			$obj['params'] = [
-				null,
-				'exception' => [
-					'code' => $exception->getCode(),
-					'message' => $exception->getMessage(),
-					'trace' => $exception->getTrace(),
-				]
-			];
-		}
+
 		$dispatcher->forward($obj);
 
 		return false;
 	}
+
+    /**
+     * @param PHPException $exception
+     *
+     * @return array
+     */
+    protected function getForwardObj(PHPException $exception)
+    {
+        $obj = parent::getForwardObj($exception);
+
+        if ($this->config->env !== 'prod' && empty($obj['params']))
+        {
+            $obj['params'] = [
+                null,
+                'exception' => [
+                    'code' => $exception->getCode(),
+                    'message' => $exception->getMessage(),
+                    'trace' => $exception->getTrace(),
+                ]
+            ];
+        }
+
+        return $obj;
+    }
 
 }

@@ -33,16 +33,16 @@ class Module implements ModuleDefinitionInterface
 		/** @var \Phalcon\Config $config */
 		$config = $di->getConfig();
 
-		if(is_readable($this->_moduleDir . '/Config/config.php')) {
-			$config->merge(require_once $this->_moduleDir . '/Config/config.php');
+		if (is_readable($this->_moduleDir . '/config/config.php')) {
+			$config->merge(require_once $this->_moduleDir . '/config/config.php');
 		}
 
-		if(is_readable($this->_moduleDir . '/Config/config.env.php')) {
-			$config->merge(include $this->_moduleDir . '/Config/config.env.php');
+		if (is_readable($this->_moduleDir . '/config/config.env.php')) {
+			$config->merge(include $this->_moduleDir . '/config/config.env.php');
 		}
 
-		if(is_readable($this->_moduleDir . '/Config/services.php')) {
-			require_once $this->_moduleDir . '/Config/services.php';
+		if (is_readable($this->_moduleDir . '/config/services.php')) {
+			require_once $this->_moduleDir . '/config/services.php';
 		}
 	}
 

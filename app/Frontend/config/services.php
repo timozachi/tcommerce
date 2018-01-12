@@ -2,26 +2,24 @@
 
 use Phalcon\Config;
 use Phalcon\Di\FactoryDefault;
-use Phalcon\Mvc\Dispatcher;
-use Phalcon\Mvc\View;
 use Phalcon\Flash\Direct as FlashDirect;
 use Phalcon\Flash\Session as FlashSession;
-use TLib\SmartSession\Adapter\Files as Session;
+use Phalcon\Mvc\Dispatcher;
+use Phalcon\Mvc\View;
 use TCommerce\Core\Http\API;
 use TCommerce\Core\Plugins\Auth as AuthPlugin;
 use TCommerce\Core\Plugins\Exception as ExceptionPlugin;
 use TCommerce\Core\Security\Auth;
+use TLib\SmartSession\Adapter\Files as Session;
 
-/** @var FactoryDefault $di */
-/** @var Config $config */
-
-/** @var View $view */
-$view = $di->getShared('view');
-$view->setViewsDir($config->application->viewsDir);
+/**
+ * @var Config $config
+ * @var FactoryDefault $di
+ */
 
 /** @var Dispatcher $dispatcher */
 $dispatcher = $di->getShared('dispatcher');
-$dispatcher->setDefaultNamespace('TCommerce\Admin\Controllers');
+$dispatcher->setDefaultNamespace('TCommerce\Frontend\Controllers');
 
 /**
  * Set up the session service
@@ -31,7 +29,7 @@ $di->setShared('session', function () use ($config)
 	ini_set('session.save_path', $config->application->sessionsDir);
 
 	$session = new Session();
-	$session->setName('tcommerce-admin');
+	$session->setName('tcommerce-frontend');
 	$session->start();
 
 	return $session;
@@ -79,13 +77,10 @@ $em->attach('dispatch:beforeException', new ExceptionPlugin());
 /**
  * Checks if a user is logged and redirects to login page if not
  */
-$em->attach(
+/*$em->attach(
 	'dispatch:beforeExecuteRoute',
 	new AuthPlugin(
-		$di->getShared('url')->get(['for' => 'admin-index-login']),
-		[
-			'index' => ['login', 'loginPost', 'logout'],
-			'errors' => ['show404', 'show500']
-		]
+		$di->getShared('url')->get(['for' => 'frontend-index-login']),
+		['errors' => ['show404', 'show500']]
 	)
-);
+);*/
