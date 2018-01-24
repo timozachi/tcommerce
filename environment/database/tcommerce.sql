@@ -13,6 +13,11 @@ File Encoding         : 65001
 Date: 2017-01-31 10:42:38
 */
 
+DROP DATABASE tcommerce;
+CREATE DATABASE tcommerce DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+USE tcommerce;
+
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
@@ -22,16 +27,16 @@ DROP TABLE IF EXISTS `actions`;
 CREATE TABLE `actions` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `module_id` smallint(5) unsigned NOT NULL,
-  `key` varchar(63) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `route` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `key` varchar(63) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `route` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `order` smallint(6) NOT NULL DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_actions_module_id_key` (`module_id`,`key`) USING BTREE,
   CONSTRAINT `fk_actions_module_id` FOREIGN KEY (`module_id`) REFERENCES `modules` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of actions
@@ -63,18 +68,18 @@ DROP TABLE IF EXISTS `addresses`;
 CREATE TABLE `addresses` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `state_id` int(10) unsigned NOT NULL,
-  `recipient` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `postal_code` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `street` varchar(511) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `number` varchar(127) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `district` varchar(127) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `city` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `recipient` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `postal_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `street` varchar(511) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `number` varchar(127) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `district` varchar(127) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `city` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `k_addresses_state_id` (`state_id`),
   CONSTRAINT `fk_addresses_state_id` FOREIGN KEY (`state_id`) REFERENCES `states` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of addresses
@@ -86,12 +91,12 @@ CREATE TABLE `addresses` (
 DROP TABLE IF EXISTS `address_types`;
 CREATE TABLE `address_types` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `applies` enum('users','stores') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'users',
-  `key` varchar(63) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `applies` enum('users','stores') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'users',
+  `key` varchar(63) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_address_types_key` (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of address_types
@@ -103,15 +108,15 @@ CREATE TABLE `address_types` (
 DROP TABLE IF EXISTS `apis`;
 CREATE TABLE `apis` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `token` varchar(63) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `token` varchar(63) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `active` tinyint(1) NOT NULL DEFAULT '0',
   `refresh` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` datetime DEFAULT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_apis_token` (`token`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of apis
@@ -130,7 +135,7 @@ CREATE TABLE `apis_roles` (
   KEY `k_apis_roles_role_id` (`role_id`),
   CONSTRAINT `fk_apis_roles_api_id` FOREIGN KEY (`api_id`) REFERENCES `apis` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_apis_roles_role_id` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of apis_roles
@@ -148,7 +153,7 @@ CREATE TABLE `apis_users` (
   KEY `k_apis_users_user_id` (`user_id`),
   CONSTRAINT `fk_apis_users_api_id` FOREIGN KEY (`api_id`) REFERENCES `apis` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_apis_users_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of apis_users
@@ -162,13 +167,13 @@ DROP TABLE IF EXISTS `countries`;
 CREATE TABLE `countries` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `code` smallint(6) NOT NULL DEFAULT '0',
-  `iso_code` char(2) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `name` varchar(127) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `currency` char(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `iso_code` char(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(127) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `currency` char(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_countries_code` (`code`),
   UNIQUE KEY `uk_countries_iso_code` (`iso_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of countries
@@ -185,16 +190,16 @@ CREATE TABLE `images` (
   `variant_id` int(10) unsigned DEFAULT NULL,
   `width` smallint(6) NOT NULL DEFAULT '0',
   `height` smallint(6) NOT NULL DEFAULT '0',
-  `image_thumb` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `image_small` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `image_large` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `image_original` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `image_thumb` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `image_small` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `image_large` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `image_original` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `k_images_product_id` (`product_id`),
   CONSTRAINT `fk_images_product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of images
@@ -206,12 +211,12 @@ CREATE TABLE `images` (
 DROP TABLE IF EXISTS `modules`;
 CREATE TABLE `modules` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `order` smallint(6) NOT NULL DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of modules
@@ -227,11 +232,11 @@ INSERT INTO `modules` VALUES ('4', 'Usuários', '0', '2016-11-16 18:40:37', '201
 DROP TABLE IF EXISTS `options`;
 CREATE TABLE `options` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `display` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `display` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_options_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of options
@@ -244,13 +249,13 @@ DROP TABLE IF EXISTS `option_values`;
 CREATE TABLE `option_values` (
   `id` int(10) unsigned NOT NULL,
   `option_id` int(10) unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `display` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `code` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `display` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `k_option_values_option_id` (`option_id`),
   CONSTRAINT `fk_option_values_option_id` FOREIGN KEY (`option_id`) REFERENCES `options` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of option_values
@@ -262,15 +267,15 @@ CREATE TABLE `option_values` (
 DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `number` varchar(63) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `token` varchar(63) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `number` varchar(63) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `token` varchar(63) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `state_id` smallint(5) unsigned NOT NULL,
   `user_id` int(10) unsigned DEFAULT NULL,
-  `user_compiled` varchar(2047) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_compiled` varchar(2047) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `address_id` int(10) unsigned DEFAULT NULL,
-  `address_compiled` varchar(2047) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `address_compiled` varchar(2047) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `billing_address_id` int(10) unsigned DEFAULT NULL,
-  `billing_address_compiled` varchar(2047) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `billing_address_compiled` varchar(2047) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `item_total` float(10,2) NOT NULL DEFAULT '0.00',
   `ship_total` float(10,2) NOT NULL DEFAULT '0.00',
   `stock_deducted` tinyint(1) NOT NULL DEFAULT '0',
@@ -288,7 +293,7 @@ CREATE TABLE `orders` (
   CONSTRAINT `fk_orders_address_id` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_orders_billing_address_id` FOREIGN KEY (`billing_address_id`) REFERENCES `addresses` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_orders_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of orders
@@ -300,12 +305,12 @@ CREATE TABLE `orders` (
 DROP TABLE IF EXISTS `order_states`;
 CREATE TABLE `order_states` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `key` varchar(63) COLLATE utf8_unicode_ci NOT NULL,
-  `name` varchar(127) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `description` varchar(511) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `key` varchar(63) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(127) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `description` varchar(511) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_order_states_key` (`key`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of order_states
@@ -318,10 +323,10 @@ DROP TABLE IF EXISTS `phones`;
 CREATE TABLE `phones` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `area_code` smallint(6) DEFAULT NULL,
-  `number` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `number` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of phones
@@ -333,12 +338,12 @@ CREATE TABLE `phones` (
 DROP TABLE IF EXISTS `phone_types`;
 CREATE TABLE `phone_types` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
-  `applies` enum('users','stores') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'users',
-  `key` varchar(63) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `name` varchar(127) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `applies` enum('users','stores') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'users',
+  `key` varchar(63) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(127) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_phone_types_key` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of phone_types
@@ -352,16 +357,16 @@ CREATE TABLE `products` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `store_id` int(10) unsigned NOT NULL,
   `shipping_category_id` int(10) unsigned NOT NULL,
-  `sku` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `permalink` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `description` varchar(4095) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `meta_keywords` varchar(511) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `meta_description` varchar(511) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `image_thumb` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Thumbnail name',
-  `image_small` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Small image name',
-  `image_large` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `image_original` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT 'Original image name',
+  `sku` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `permalink` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `description` varchar(4095) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `meta_keywords` varchar(511) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `meta_description` varchar(511) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `image_thumb` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'Thumbnail name',
+  `image_small` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'Small image name',
+  `image_large` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image_original` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'Original image name',
   `stock` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `cost_price` decimal(10,2) NOT NULL DEFAULT '0.00',
   `price` decimal(10,2) NOT NULL DEFAULT '0.00',
@@ -1910,7 +1915,7 @@ CREATE TABLE `products_options` (
   KEY `k_products_options_option_id` (`option_id`) USING BTREE,
   CONSTRAINT `fk_products_options_option_id` FOREIGN KEY (`option_id`) REFERENCES `options` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_products_options_product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of products_options
@@ -1922,12 +1927,12 @@ CREATE TABLE `products_options` (
 DROP TABLE IF EXISTS `prototypes`;
 CREATE TABLE `prototypes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `description` varchar(4095) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `description` varchar(4095) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of prototypes
@@ -1944,7 +1949,7 @@ CREATE TABLE `prototypes_options` (
   KEY `k_prototypes_options_option_id` (`option_id`),
   CONSTRAINT `fk_prototypes_options_option_id` FOREIGN KEY (`option_id`) REFERENCES `options` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_prototypes_options_prototype_id` FOREIGN KEY (`prototype_id`) REFERENCES `prototypes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of prototypes_options
@@ -1956,14 +1961,14 @@ CREATE TABLE `prototypes_options` (
 DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `key` varchar(63) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `key` varchar(63) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `admin` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_roles_key` (`key`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of roles
@@ -1983,7 +1988,7 @@ CREATE TABLE `roles_actions` (
   KEY `k_roles_modules_action_id` (`action_id`) USING BTREE,
   CONSTRAINT `fk_roles_modules_action_id` FOREIGN KEY (`action_id`) REFERENCES `actions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_roles_modules_role_id` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of roles_actions
@@ -1996,11 +2001,11 @@ DROP TABLE IF EXISTS `shipping_categories`;
 CREATE TABLE `shipping_categories` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `store_id` int(10) unsigned DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `k_shipping_categories_store_id` (`store_id`),
   CONSTRAINT `fk_shipping_categories_store_id` FOREIGN KEY (`store_id`) REFERENCES `stores` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of shipping_categories
@@ -2014,12 +2019,12 @@ DROP TABLE IF EXISTS `states`;
 CREATE TABLE `states` (
   `id` int(10) unsigned NOT NULL,
   `country_id` smallint(5) unsigned NOT NULL,
-  `abbreviation` char(2) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `name` varchar(127) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `abbreviation` char(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(127) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `k_states_country_id_abbreviation` (`country_id`,`abbreviation`),
   CONSTRAINT `fk_states_country_id` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of states
@@ -2058,17 +2063,17 @@ INSERT INTO `states` VALUES ('27', '1', 'TO', 'Tocantins');
 DROP TABLE IF EXISTS `stores`;
 CREATE TABLE `stores` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `corporate_name` varchar(511) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `description` varchar(2047) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `cnpj` varchar(14) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `logo` varchar(63) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `corporate_name` varchar(511) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `description` varchar(2047) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `cnpj` varchar(14) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `logo` varchar(63) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `active` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of stores
@@ -2089,7 +2094,7 @@ CREATE TABLE `stores_addresses` (
   CONSTRAINT `fk_store_id` FOREIGN KEY (`store_id`) REFERENCES `stores` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_stores_addresses_address_id` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_stores_addresses_address_type_id` FOREIGN KEY (`address_type_id`) REFERENCES `address_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of stores_addresses
@@ -2109,7 +2114,7 @@ CREATE TABLE `stores_phones` (
   CONSTRAINT `fk_stores_phones_phone_id` FOREIGN KEY (`phone_id`) REFERENCES `phones` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_stores_phones_phone_type_id` FOREIGN KEY (`phone_type_id`) REFERENCES `phone_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_stores_phones_user_id` FOREIGN KEY (`store_id`) REFERENCES `stores` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of stores_phones
@@ -2121,19 +2126,19 @@ CREATE TABLE `stores_phones` (
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `email` varchar(127) COLLATE utf8_unicode_ci NOT NULL,
-  `password` varchar(127) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(255) CHARACTER SET utf8mb4  COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `email` varchar(127) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(127) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `pj` tinyint(1) NOT NULL DEFAULT '0',
-  `cpf` varchar(11) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `rg` varchar(15) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `cnpj` varchar(14) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `cpf` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `rg` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `cnpj` varchar(14) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `birth_date` date DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of users
@@ -2154,7 +2159,7 @@ CREATE TABLE `users_addresses` (
   CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_users_addresses_address_id` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_users_addresses_address_type_id` FOREIGN KEY (`address_type_id`) REFERENCES `address_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of users_addresses
@@ -2174,7 +2179,7 @@ CREATE TABLE `users_phones` (
   CONSTRAINT `fk_users_phones_phone_id` FOREIGN KEY (`phone_id`) REFERENCES `phones` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_users_phones_phone_type_id` FOREIGN KEY (`phone_type_id`) REFERENCES `phone_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_users_phones_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of users_phones
@@ -2187,12 +2192,12 @@ DROP TABLE IF EXISTS `variants`;
 CREATE TABLE `variants` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `product_id` int(10) unsigned NOT NULL,
-  `sku` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `image_thumb` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `image_small` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `image_large` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `image_original` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `sku` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `image_thumb` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `image_small` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `image_large` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `image_original` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `stock` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `cost_price` decimal(10,2) NOT NULL DEFAULT '0.00',
   `price` decimal(10,2) NOT NULL DEFAULT '0.00',
@@ -2207,7 +2212,7 @@ CREATE TABLE `variants` (
   PRIMARY KEY (`id`),
   KEY `k_variants_product_id` (`product_id`),
   CONSTRAINT `fk_variants_product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of variants
@@ -2227,7 +2232,7 @@ CREATE TABLE `variant_option_values` (
   CONSTRAINT `fk_variant_option_values_option_value_id` FOREIGN KEY (`option_value_id`) REFERENCES `option_values` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_variant_option_values_product_option_id` FOREIGN KEY (`product_option_id`) REFERENCES `products_options` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_variant_option_values_product_variant_id` FOREIGN KEY (`variant_id`) REFERENCES `variants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of variant_option_values
