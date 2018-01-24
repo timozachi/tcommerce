@@ -43,7 +43,7 @@ $di->setShared('router', function ()
 	/**
 	 * Include Routes
 	 */
-	if(php_sapi_name() === 'cli') {
+	if (php_sapi_name() === 'cli') {
 		$router = include APP_PATH . '/config/cli-routes.php';
 	} else {
 		/**

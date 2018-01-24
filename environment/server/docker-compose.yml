@@ -1,0 +1,55 @@
+version: "3"
+
+services:
+  webserver:
+    build:
+      context: ./
+      args:
+        - PGID=${PGID}
+        - PUID=${PUID}
+        - INSTALL_XDEBUG=${INSTALL_XDEBUG}
+        - INSTALL_OPCACHE=${INSTALL_OPCACHE}
+        - INSTALL_INTL=${INSTALL_INTL}
+        - INSTALL_SOAP=${INSTALL_SOAP}
+        - INSTALL_ZIP=${INSTALL_ZIP}
+        - INSTALL_TOKENIZER=${INSTALL_TOKENIZER}
+        - INSTALL_MYSQLI=${INSTALL_MYSQLI}
+        - INSTALL_PGSQL=${INSTALL_PGSQL}
+        - INSTALL_MONGO=${INSTALL_MONGO}
+        - INSTALL_PHPREDIS=${INSTALL_PHPREDIS}
+        - INSTALL_APCU=${INSTALL_APCU}
+        - INSTALL_MEMCACHED=${INSTALL_MEMCACHED}
+        - INSTALL_GD=${INSTALL_GD}
+        - INSTALL_PHALCON_FRAMEWORK=${INSTALL_PHALCON_FRAMEWORK}
+        - PHALCON_FRAMEWORK_VERSION=${PHALCON_FRAMEWORK_VERSION}
+    volumes:
+      - ../../:/var/www
+    ports:
+      - "80:80"
+    extra_hosts:
+      - "hostaddress:${HOST_ADDRESS}"
+    networks:
+      - default
+
+  redis:
+    image: redis:alpine
+    networks:
+      - default
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=tcommerce
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=tcommerce
+      - MYSQL_PASSWORD=tcommerce
+    volumes:
+      - ${DATA_SAVE_PATH}/mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - default
+
+networks:
+  default:
+    driver: "bridge"

@@ -6,4 +6,4 @@
 $router->setDefaultTask('main');
 $router->setDefaultAction('index');
 
-$router->add('/tests/weird', 'test:another');
+$router->add('/tests/another', 'test:another');

@@ -1,0 +1,32 @@
+server {
+
+    listen 80;
+    listen [::]:80;
+
+    root /var/www/public;
+    index index.php index.html index.htm;
+    server_name tcommerce.local;
+
+    access_log  logs/tcommerce-access.log  main;
+    error_log   logs/tcommerce-error.log;
+
+    location / {
+         try_files $uri $uri/ /index.php$is_args$args;
+    }
+
+    location ~ \.php$ {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        try_files $uri $fastcgi_script_name =404;
+        fastcgi_pass unix:/run/php7.1-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_buffers 16 16k;
+        fastcgi_buffer_size 32k;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param SCRIPT_NAME $fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}

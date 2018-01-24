@@ -1,3 +1,4 @@
-/.idea
-/vendor
+/.idea/
+/vendor/
 config.env.php
+.env
