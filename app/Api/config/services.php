@@ -14,8 +14,6 @@ use TCommerce\Api\Security\Auth;
  * @var FactoryDefault $di
  */
 
-$di->getShared('view')->disable();
-
 /**
  * @var Dispatcher $dispatcher
  */
@@ -25,14 +23,14 @@ $dispatcher->setDefaultNamespace('TCommerce\Api\Controllers');
 $em = $dispatcher->getEventsManager();
 
 /**
- * Check if the API token is allowed to access certain action using the TokenPlugin
+ * Exception Plugin for error routes
  */
 $em->attach('dispatch:beforeException', new ExceptionPlugin());
 
 /**
  * Check if the API token is allowed to access certain action using the TokenPlugin
  */
-$em->attach('dispatch', new AuthPlugin());
+//$em->attach('dispatch', new AuthPlugin());
 
 if ($config->api->logRequests) {
 	$em->attach('dispatch:afterDispatchLoop', new LogPlugin());
@@ -47,7 +45,7 @@ $di->setShared('auth', function () use ($config)
 });
 
 /**
- * Set up the session service
+ * Set up the session service|
  */
 $di->setShared('session', function () use ($config)
 {

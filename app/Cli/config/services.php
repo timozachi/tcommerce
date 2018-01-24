@@ -1,14 +1,13 @@
 <?php
 
+use Phalcon\Mvc\Dispatcher;
 use Phalcon\Config;
 use Phalcon\Di\FactoryDefault;
-use Phalcon\Mvc\Dispatcher;
 
 /**
  * @var Config $config
  * @var FactoryDefault $di
  */
-$di->getShared('view')->disable();
 
 /**
  * @var Dispatcher $dispatcher

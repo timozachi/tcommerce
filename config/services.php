@@ -93,8 +93,15 @@ $di->setShared('view', function ()
 			}
 		]
 	);
-	$view->setViewsDir($config->application->viewsDir);
-	$view->setRenderLevel(View::LEVEL_ACTION_VIEW);
+
+	if (! empty($config->application->viewsDir))
+	{
+        $view->setViewsDir($config->application->viewsDir);
+        $view->setRenderLevel(View::LEVEL_ACTION_VIEW);
+    }
+    else {
+        $view->disable();
+    }
 
 	return $view;
 });
@@ -182,7 +189,10 @@ $di->set('modelsCache', function ()
 
 	$cache_config = $config->cache;
 	$class = 'Phalcon\Cache\Backend\\' . $cache_config->adapter;
-	$cache = new $class($front_cache, $cache_config->data ? $cache_config->data->toArray() : null);
+	$cache = new $class(
+	    $front_cache,
+        $cache_config->data ? $cache_config->data->toArray() : null
+    );
 
 	return new $cache;
 });

@@ -18,7 +18,7 @@ class Auth extends Injectable
 
 	public function attempt($input = null, &$errors = null)
 	{
-		if(is_null($input)) {
+		if (is_null($input)) {
 			$input = Input::post();
 		}
 
@@ -26,8 +26,7 @@ class Auth extends Injectable
 
 		/** @var Group $messages */
 		$messages = $validation->validate($input);
-		if($messages->count())
-		{
+		if ($messages->count()) {
 			$errors = MessagesParser::parse($messages);
 		}
 		else
@@ -40,27 +39,24 @@ class Auth extends Injectable
 				]
 			);
 
-			if($user)
+            $errors = [
+                'password' => ['Email not found']
+            ];
+			if ($user)
 			{
-				if($this->security->checkHash($input['password'], $user->password))
+				if ($this->security->checkHash($input['password'], $user->password))
 				{
 					AuthPlugin::$userId = $user->id;
+
 					return (int)$user->id;
 				}
-				else
-				{
-					$errors = [
-						'password' => ['Invalid password']
-					];
-				}
+
+                $errors = [
+                    'password' => ['Invalid password']
+                ];
 			}
-			else
-			{
-				$errors = [
-					'password' => ['Email not found']
-				];
-				$this->security->hash(rand());
-			}
+
+            $this->security->hash(rand());
 		}
 
 		return false;
@@ -68,7 +64,7 @@ class Auth extends Injectable
 
 	public function check()
 	{
-		if(AuthPlugin::$userId) {
+		if (AuthPlugin::$userId) {
 			return true;
 		}
 
@@ -77,7 +73,7 @@ class Auth extends Injectable
 
 	public function getUserId()
 	{
-		if($this->check()) {
+		if ($this->check()) {
 			return AuthPlugin::$userId;
 		}
 
@@ -86,13 +82,13 @@ class Auth extends Injectable
 
 	public function getUser($asAnArray = true)
 	{
-		if($this->check())
+		if ($this->check())
 		{
-			if(!$this->_user) {
+			if (! $this->_user) {
 				$this->_user = User::findFirst($this->getUserId());
 			}
 
-			if($asAnArray)
+			if ($asAnArray)
 			{
 				$user = $this->_user->toArray();
 				User::parse($user);
