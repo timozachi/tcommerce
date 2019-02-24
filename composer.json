@@ -1,8 +1,23 @@
 {
+  "name": "timozachi/tcommerce",
+  "type": "library",
+  "description": "Base multi-modular e-commerce application using PHP Phalcon Framework",
+  "keywords": ["tcommerce", "e-commerce", "multi-modular", "framework", "phalcon"],
+  "authors": [
+    {
+      "name": "Timóteo Zachi",
+      "email": "zachi.timo@gmail.com"
+    }
+  ],
   "require": {
-    "firebase/php-jwt": "^4.0"
+    "php": "^7.1",
+    "ext-json": "*",
+    "firebase/php-jwt": "^5.0"
   },
   "require-dev": {
-    "phalcon/devtools": "^3.2"
+    "phpstan/phpstan": "^0.11.2",
+    "friendsofphp/php-cs-fixer": "^2.14",
+    "phpunit/phpunit": "^8.0",
+    "sensiolabs/security-checker": "^5.0"
   }
 }

@@ -1,44 +1,65 @@
-version: "3"
+version: '3'
 
 services:
 
-  webserver:
+  nginx:
     build:
-      context: ./
+      context: ./nginx/
       args:
         - PGID=${PGID}
         - PUID=${PUID}
-        - INSTALL_XDEBUG=${INSTALL_XDEBUG}
-        - INSTALL_OPCACHE=${INSTALL_OPCACHE}
-        - INSTALL_INTL=${INSTALL_INTL}
-        - INSTALL_SOAP=${INSTALL_SOAP}
-        - INSTALL_ZIP=${INSTALL_ZIP}
-        - INSTALL_TOKENIZER=${INSTALL_TOKENIZER}
-        - INSTALL_MYSQLI=${INSTALL_MYSQLI}
-        - INSTALL_PGSQL=${INSTALL_PGSQL}
-        - INSTALL_MONGO=${INSTALL_MONGO}
-        - INSTALL_PHPREDIS=${INSTALL_PHPREDIS}
+    volumes:
+      - ../../:/var/www
+      - ./nginx/logs:/var/log/nginx
+      - ./nginx/sites:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+    links:
+      - php-fpm
+    networks:
+      - default
+
+  php-fpm:
+    build:
+      context: ./php-fpm/
+      args:
+        - PGID=${PGID}
+        - PUID=${PUID}
+        - PHP_VERSION=${PHP_VERSION}
+        - PHP_INI_ENVIRONMENT=${PHP_INI_ENVIRONMENT}
         - INSTALL_APCU=${INSTALL_APCU}
-        - INSTALL_MEMCACHED=${INSTALL_MEMCACHED}
+        - INSTALL_BCMATH=${INSTALL_BCMATH}
         - INSTALL_GD=${INSTALL_GD}
+        - INSTALL_INTL=${INSTALL_INTL}
+        - INSTALL_MEMCACHED=${INSTALL_MEMCACHED}
+        - INSTALL_MONGO=${INSTALL_MONGO}
+        - INSTALL_MYSQL=${INSTALL_MYSQL}
+        - INSTALL_OPCACHE=${INSTALL_OPCACHE}
+        - INSTALL_PGSQL=${INSTALL_PGSQL}
+        - INSTALL_PHPREDIS=${INSTALL_PHPREDIS}
+        - INSTALL_SOAP=${INSTALL_SOAP}
+        - INSTALL_SQLITE=${INSTALL_SQLITE}
+        - INSTALL_TOKENIZER=${INSTALL_TOKENIZER}
+        - INSTALL_XDEBUG=${INSTALL_XDEBUG}
+        - INSTALL_ZIP=${INSTALL_ZIP}
         - INSTALL_PHALCON_FRAMEWORK=${INSTALL_PHALCON_FRAMEWORK}
         - PHALCON_FRAMEWORK_VERSION=${PHALCON_FRAMEWORK_VERSION}
     volumes:
       - ../../:/var/www
-    ports:
-      - "80:80"
-    extra_hosts:
-      - "hostaddress:${HOST_ADDRESS}"
+    expose:
+      - "9000"
     networks:
       - default
 
   redis:
     image: redis:alpine
+    expose:
+      - "6379"
     networks:
       - default
 
   mysql:
-    image: mysql:5.7
+    image: mysql:8
     environment:
       - MYSQL_DATABASE=tcommerce
       - MYSQL_ROOT_PASSWORD=root

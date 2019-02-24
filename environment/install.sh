@@ -2,10 +2,6 @@
 
 cd ../
 
-echo "Applying chmod 777 to these folders: "
-echo $(find storage -type d)
-chmod 777 $(find storage -type d)
-
 composer install
 
 read -p "Environment (prod|dev) [dev]: " environment
